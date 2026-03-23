@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>哥伦比娅</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Segoe UI", "Microsoft YaHei", sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #4a47a3, #7b68ee, #9370db);
+            min-height: 100vh;
+            color: white;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        h1 {
+            font-size: 48px;
+            letter-spacing: 3px;
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+        }
+
+        .subtitle {
+            font-size: 18px;
+            opacity: 0.85;
+            margin-top: 8px;
+        }
+
+        .upload-area {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 30px;
+            text-align: center;
+            margin-bottom: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .upload-btn {
+            background: rgba(255, 255, 255, 0.25);
+            color: white;
+            border: none;
+            padding: 14px 32px;
+            border-radius: 50px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .upload-btn:hover {
+            background: rgba(255, 255, 255, 0.4);
+            transform: translateY(-3px);
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .photo-card {
+            background: rgba(255, 255, 255, 0.12);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+
+        .photo-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .photo-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .photo-actions {
+            padding: 12px;
+            text-align: center;
+        }
+
+        .download-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            padding: 8px 18px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .download-btn:hover {
+            background: rgba(255, 255, 255, 0.35);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>哥伦比娅</h1>
+            <p class="subtitle">公共相册 · 分享美好瞬间</p>
+        </header>
+
+        <div class="upload-area">
+            <label for="fileInput" class="upload-btn">选择图片并上传</label>
+            <input type="file" id="fileInput" accept="image/*" multiple>
+        </div>
+
+        <div class="gallery" id="gallery"></div>
+    </div>
+
+    <script>
+        const fileInput = document.getElementById('fileInput');
+        const gallery = document.getElementById('gallery');
+
+        fileInput.addEventListener('change', (e) => {
+            const files = e.target.files;
+            for (let file of files) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    const imgSrc = event.target.result;
+                    addPhoto(imgSrc);
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        function addPhoto(src) {
+            const card = document.createElement('div');
+            card.className = 'photo-card';
+
+            const img = document.createElement('img');
+            img.src = src;
+
+            const actions = document.createElement('div');
+            actions.className = 'photo-actions';
+
+            const downloadBtn = document.createElement('button');
+            downloadBtn.className = 'download-btn';
+            downloadBtn.textContent = '下载';
+            downloadBtn.onclick = () => {
+                const a = document.createElement('a');
+                a.href = src;
+                a.download = '哥伦比娅_' + Date.now() + '.jpg';
+                a.click();
+            };
+
+            actions.appendChild(downloadBtn);
+            card.appendChild(img);
+            card.appendChild(actions);
+            gallery.appendChild(card);
+        }
+    </script>
+</body>
+</html>
